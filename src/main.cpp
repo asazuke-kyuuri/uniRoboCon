@@ -45,6 +45,12 @@ void setup() {
   PS4.setRumble(0, 0);
   PS4.sendToController(); // PS4に送信(これで振動が止まる)
 
+  //モーターピンの初期設定
+  pinMode(rf,OUTPUT);
+  pinMode(lf,OUTPUT);
+  pinMode(rb,OUTPUT);
+  pinMode(lb,OUTPUT);
+
   /* ここにサーボモータの初期化コードを書く */
   //
   //
