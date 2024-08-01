@@ -17,6 +17,12 @@ float l_y = 0.0; // 左スティックのY軸
 float r_x = 0.0; // 右スティックのX軸
 float r_y = 0.0; // 右スティックのY軸
 
+//モーターのピン番号
+#define rf 22 //right front
+#define lf 33 //left front
+#define rb 44 //right back
+#define lb 55 //left back
+
 // ボタンの状態を保存する配列(単押し, 長押し判定用)
 bool prev_bttn_state[16] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 
@@ -61,6 +67,50 @@ void ReceiveControllerInput() {
     l_y = PS4.LStickY() / 127.0; // -127 ~ 127 -> -1.0 ~ 1.0
     r_x = PS4.RStickX() / 127.0; // -127 ~ 127 -> -1.0 ~ 1.0
     r_y = PS4.RStickY() / 127.0; // -127 ~ 127 -> -1.0 ~ 1.0
+
+    //スティックの値がちょっとぶれたときの補正
+    if(l_x>=1.0){
+      l_x==1.0;
+    }
+    else if(l_x<=-1.0){
+      l_x==-1.0;
+    }
+    else{
+      l_x==l_x;
+    }
+
+    if(l_y>=1.0){
+      l_y==1.0;
+    }
+    else if(l_x<=-1.0){
+      l_y==-1.0;
+    }
+    else{
+      l_y==l_y;
+    }
+
+    if(r_x>=1.0){
+      r_x==1.0;
+    }
+    else if(r_x<=-1.0){
+      r_x==-1.0;
+    }
+    else{
+      r_x==r_x;
+    }
+
+    if(r_y>=1.0){
+      r_y==1.0;
+    }
+    else if(r_y<=-1.0){
+      r_y==-1.0;
+    }
+    else{
+      r_y==r_y;
+    }
+
+
+
 
     // ボタン押したときの挙動をifの中に書く
     if (PS4.Up() && !prev_bttn_state[0]) {
