@@ -2,6 +2,7 @@
 #include <ESP32Servo.h> 
 #include <PS4Controller.h>
 #include "PS4Controller.h"
+#include "CytronMotorDriver.h"
 /* ここにサーボモータのライブラリをインクルードする */
 //
 //
@@ -22,6 +23,13 @@ float r_y = 0.0; // 右スティックのY軸
 #define lf 33 //left front
 #define rb 44 //right back
 #define lb 55 //left back
+
+// Configure the motor driver.
+//GPIO 0,1,3,14,15,34,35,36,39 は使用しない
+CytronMD rfmotor(PWM_DIR, 3, 4);  // PWM = Pin 3, DIR = Pin 4.
+CytronMD lfmotor(PWM_DIR, 3, 4);
+CytronMD rbmotor(PWM_DIR, 3, 4);
+CytronMD lbmotor(PWM_DIR, 3, 4);
 
 // ボタンの状態を保存する配列(単押し, 長押し判定用)
 bool prev_bttn_state[16] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
@@ -60,8 +68,99 @@ void loop() {
   ReceiveControllerInput(); // PS4コントローラーの入力を受け取る
   Serial.printf("> PS4: LStickX: %f, LStickY: %f, RStickX: %f, RStickY: %f\n", l_x, l_y, r_x, r_y);
   /* ここにスティックの値に応じたサーボモータの制御コードを書く */
-  //
-  //
+
+  //bool stopOrMove=false;//停止かそれ以外か false=stop,true=move
+  bool rotate=true;//その場で回転するか false=nomalMove,true=rotate
+
+  //255 128
+
+  if(-0.3<=l_x&&l_x<=0.3&&-0.3<=l_y&&l_y<=0.3){
+    //停止
+    rfmotor.setSpeed(0);
+    lfmotor.setSpeed(0);
+    rbmotor.setSpeed(0);
+    lbmotor.setSpeed(0);
+  }
+  else if(){
+    //前
+    rfmotor.setSpeed(255);
+    lfmotor.setSpeed(255);
+    rbmotor.setSpeed(255);
+    lbmotor.setSpeed(255);
+    rotate=false;
+  }
+  else if(){
+    //後ろ
+    rfmotor.setSpeed(-255);
+    lfmotor.setSpeed(-255);
+    rbmotor.setSpeed(-255);
+    lbmotor.setSpeed(-255);
+    rotate=false;
+  }
+  else if(){
+    //右
+    rfmotor.setSpeed(-255);
+    lfmotor.setSpeed(255);
+    rbmotor.setSpeed(255);
+    lbmotor.setSpeed(-255);
+    rotate=false;
+  }
+  else if(){
+    //左
+    rfmotor.setSpeed(255);
+    lfmotor.setSpeed(-255);
+    rbmotor.setSpeed(-255);
+    lbmotor.setSpeed(255);
+    rotate=false;
+  }
+  else if(){
+    //斜め右前
+    rfmotor.setSpeed(0);
+    lfmotor.setSpeed(255);
+    rbmotor.setSpeed(255);
+    lbmotor.setSpeed(0);
+    rotate=false;
+  }
+  else if(){
+    //斜め左前
+    rfmotor.setSpeed(255);
+    lfmotor.setSpeed(0);
+    rbmotor.setSpeed(0);
+    lbmotor.setSpeed(255);
+    rotate=false;
+  }
+  else if(){
+    //斜め右後ろ
+    rfmotor.setSpeed(-255);
+    lfmotor.setSpeed(0);
+    rbmotor.setSpeed(0);
+    lbmotor.setSpeed(-255);
+    rotate=false;
+  }
+  else if(){
+    //斜め左後ろ
+    rfmotor.setSpeed(0);
+    lfmotor.setSpeed(-255);
+    rbmotor.setSpeed(-255);
+    lbmotor.setSpeed(0);
+    rotate=false;
+  }
+  if(rotate){
+    if(){
+      //右旋回
+      rfmotor.setSpeed(-255);
+      lfmotor.setSpeed(255);
+      rbmotor.setSpeed(-255);
+      lbmotor.setSpeed(255);
+    }
+    else if(){
+      //左旋回
+      rfmotor.setSpeed(255);
+      lfmotor.setSpeed(-255);
+      rbmotor.setSpeed(255);
+      lbmotor.setSpeed(-255);
+    }
+  }
   delay(10); // delayの秒数[ms]は適宜変更する. 10ms = 0.01s.
 }
 
