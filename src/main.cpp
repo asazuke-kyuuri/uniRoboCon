@@ -74,14 +74,14 @@ void loop() {
 
   //255 128
 
-  if(-0.3<=l_x&&l_x<=0.3&&-0.3<=l_y&&l_y<=0.3){
+  if(-0.2<=l_x&&l_x<=0.2&&-0.2<=l_y&&l_y<=0.2){
     //停止
     rfmotor.setSpeed(0);
     lfmotor.setSpeed(0);
     rbmotor.setSpeed(0);
     lbmotor.setSpeed(0);
   }
-  else if(){
+  else if(-0.2<=l_x&&l_x<=0.2&&0.2<=l_y&&l_y<=1){
     //前
     rfmotor.setSpeed(255);
     lfmotor.setSpeed(255);
@@ -89,7 +89,7 @@ void loop() {
     lbmotor.setSpeed(255);
     rotate=false;
   }
-  else if(){
+  else if(0.2<=l_x&&l_x<=0.2&&-1<=l_y&&l_y<=-0.2){
     //後ろ
     rfmotor.setSpeed(-255);
     lfmotor.setSpeed(-255);
@@ -97,7 +97,7 @@ void loop() {
     lbmotor.setSpeed(-255);
     rotate=false;
   }
-  else if(){
+  else if(0.2<=l_x&&l_x<=1&&-0.2<=l_y&&l_y<=0.2){
     //右
     rfmotor.setSpeed(-255);
     lfmotor.setSpeed(255);
@@ -105,7 +105,7 @@ void loop() {
     lbmotor.setSpeed(-255);
     rotate=false;
   }
-  else if(){
+  else if(-1<=l_x&&l_x<=-0.2&&-0.2<=l_y&&l_y<=0.2){
     //左
     rfmotor.setSpeed(255);
     lfmotor.setSpeed(-255);
@@ -113,7 +113,7 @@ void loop() {
     lbmotor.setSpeed(255);
     rotate=false;
   }
-  else if(){
+  else if(0.2<=l_x&&l_x<=1&&0.2<=l_y&&l_y<=1){
     //斜め右前
     rfmotor.setSpeed(0);
     lfmotor.setSpeed(255);
@@ -121,7 +121,7 @@ void loop() {
     lbmotor.setSpeed(0);
     rotate=false;
   }
-  else if(){
+  else if(-1<=l_x&&l_x<=-0.2&&0.2<=l_y&&l_y<=1){
     //斜め左前
     rfmotor.setSpeed(255);
     lfmotor.setSpeed(0);
@@ -129,7 +129,7 @@ void loop() {
     lbmotor.setSpeed(255);
     rotate=false;
   }
-  else if(){
+  else if(0.2<=l_x&&l_x<=1&&-1<=l_y&&l_y<=-0.2){
     //斜め右後ろ
     rfmotor.setSpeed(-255);
     lfmotor.setSpeed(0);
@@ -137,7 +137,7 @@ void loop() {
     lbmotor.setSpeed(-255);
     rotate=false;
   }
-  else if(){
+  else if(-1<=l_x&&l_x<=-0.2&&-1<=l_y&&l_y<=-0.2){
     //斜め左後ろ
     rfmotor.setSpeed(0);
     lfmotor.setSpeed(-255);
@@ -146,14 +146,14 @@ void loop() {
     rotate=false;
   }
   if(rotate){
-    if(){
+    if(0<=r_x&&r_x<=1){
       //右旋回
       rfmotor.setSpeed(-255);
       lfmotor.setSpeed(255);
       rbmotor.setSpeed(-255);
       lbmotor.setSpeed(255);
     }
-    else if(){
+    else if(-1<=r_x&&r_x<0){
       //左旋回
       rfmotor.setSpeed(255);
       lfmotor.setSpeed(-255);
