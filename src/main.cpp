@@ -9,7 +9,7 @@
 
 // PS4コントローラーのMACアドレス
 // 使いたいPS4コントローラのMACアドレスをあらかじめ調べておく
-#define PS4_ADDR "0C:B8:15:C5:1C:C4" 
+#define PS4_ADDR "e8:c8:29:98:21:36" 
 
 void ReceiveControllerInput();
 
