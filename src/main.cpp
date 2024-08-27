@@ -9,7 +9,8 @@
 
 // PS4コントローラーのMACアドレス
 // 使いたいPS4コントローラのMACアドレスをあらかじめ調べておく
-#define PS4_ADDR "e8:c8:29:98:21:36" 
+#define PS4_ADDR "11:11:11:11:11:11" 
+//64:82:14:12:57:57
 
 void ReceiveControllerInput();
 
@@ -18,18 +19,33 @@ float l_y = 0.0; // 左スティックのY軸
 float r_x = 0.0; // 右スティックのX軸
 float r_y = 0.0; // 右スティックのY軸
 
-//モーターのピン番号
-#define rf 22 //right front
-#define lf 33 //left front
-#define rb 44 //right back
-#define lb 55 //left back
+/*//モーターのピン番号
+#define rf 18 //right front
+#define lf 32 //left front
+#define rb 22 //right back
+#define lb 25 //left back*/
 
 // Configure the motor driver.
 //GPIO 0,1,3,14,15,34,35,36,39 は使用しない
-CytronMD rfmotor(PWM_DIR, 3, 4);  // PWM = Pin 3, DIR = Pin 4.
-CytronMD lfmotor(PWM_DIR, 3, 4);
-CytronMD rbmotor(PWM_DIR, 3, 4);
-CytronMD lbmotor(PWM_DIR, 3, 4);
+CytronMD rfmotor(PWM_DIR, 18, 19);  // PWM = Pin 3, DIR = Pin 4.
+CytronMD lfmotor(PWM_DIR, 32, 33);
+CytronMD rbmotor(PWM_DIR, 16, 17);
+CytronMD lbmotor(PWM_DIR, 25, 26);
+
+const int a=18;
+const int b=19;
+const int c=32;
+const int d=33;
+const int e=25;
+const int f=26;
+const int g=16;
+const int h=17;
+
+//bool stopOrMove=false;//停止かそれ以外か false=stop,true=move
+  bool rotate=false;//その場で回転するか false=nomalMove,true=rotate
+  bool m1=false;
+  bool m2=false;
+  bool m3=false;
 
 // ボタンの状態を保存する配列(単押し, 長押し判定用)
 bool prev_bttn_state[16] = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
@@ -54,10 +70,14 @@ void setup() {
   PS4.sendToController(); // PS4に送信(これで振動が止まる)
 
   //モーターピンの初期設定
-  pinMode(rf,OUTPUT);
-  pinMode(lf,OUTPUT);
-  pinMode(rb,OUTPUT);
-  pinMode(lb,OUTPUT);
+  pinMode(a,OUTPUT);
+  pinMode(b,OUTPUT);
+  pinMode(c,OUTPUT);
+  pinMode(d,OUTPUT);
+  pinMode(e,OUTPUT);
+  pinMode(f,OUTPUT);
+  pinMode(g,OUTPUT);
+  pinMode(h,OUTPUT);
 
   /* ここにサーボモータの初期化コードを書く */
   //
@@ -69,99 +89,108 @@ void loop() {
   Serial.printf("> PS4: LStickX: %f, LStickY: %f, RStickX: %f, RStickY: %f\n", l_x, l_y, r_x, r_y);
   /* ここにスティックの値に応じたサーボモータの制御コードを書く */
 
-  //bool stopOrMove=false;//停止かそれ以外か false=stop,true=move
-  bool rotate=true;//その場で回転するか false=nomalMove,true=rotate
-
   //255 128
 
-  if(-0.2<=l_x&&l_x<=0.2&&-0.2<=l_y&&l_y<=0.2){
+  if(-0.2<l_x&&l_x<0.2&&-0.2<l_y&&l_y<0.2){
     //停止
     rfmotor.setSpeed(0);
     lfmotor.setSpeed(0);
     rbmotor.setSpeed(0);
     lbmotor.setSpeed(0);
+    //rotate=true;
+    Serial.println("stop");
   }
-  else if(-0.2<=l_x&&l_x<=0.2&&0.2<=l_y&&l_y<=1){
+  else if(-0.2<=l_x&&l_x<=0.2&&0.2<=l_y&&l_y<=1.1){
     //前
-    rfmotor.setSpeed(255);
+    rfmotor.setSpeed(-255);
     lfmotor.setSpeed(255);
-    rbmotor.setSpeed(255);
+    rbmotor.setSpeed(-255);
     lbmotor.setSpeed(255);
     rotate=false;
+    Serial.println("front");
   }
-  else if(0.2<=l_x&&l_x<=0.2&&-1<=l_y&&l_y<=-0.2){
+  else if(0.2<=l_x&&l_x<=0.2&&-1.1<=l_y&&l_y<=-0.2){
     //後ろ
-    rfmotor.setSpeed(-255);
+    rfmotor.setSpeed(255);
     lfmotor.setSpeed(-255);
-    rbmotor.setSpeed(-255);
-    lbmotor.setSpeed(-255);
-    rotate=false;
-  }
-  else if(0.2<=l_x&&l_x<=1&&-0.2<=l_y&&l_y<=0.2){
-    //右
-    rfmotor.setSpeed(-255);
-    lfmotor.setSpeed(255);
     rbmotor.setSpeed(255);
     lbmotor.setSpeed(-255);
     rotate=false;
+    Serial.println("back");
   }
-  else if(-1<=l_x&&l_x<=-0.2&&-0.2<=l_y&&l_y<=0.2){
-    //左
+  else if(0.2<=l_x&&l_x<=1.1&&-0.2<=l_y&&l_y<=0.2){
+    //右
     rfmotor.setSpeed(255);
-    lfmotor.setSpeed(-255);
+    lfmotor.setSpeed(255);
     rbmotor.setSpeed(-255);
+    lbmotor.setSpeed(-255);
+    rotate=false;
+    Serial.println("right");
+  }
+  else if(-1.1<=l_x&&l_x<=-0.2&&-0.2<=l_y&&l_y<=0.2){
+    //左
+    rfmotor.setSpeed(-255);
+    lfmotor.setSpeed(-255);
+    rbmotor.setSpeed(255);
     lbmotor.setSpeed(255);
     rotate=false;
+    Serial.println("left");
   }
-  else if(0.2<=l_x&&l_x<=1&&0.2<=l_y&&l_y<=1){
+  else if(0.2<=l_x&&l_x<=1.1&&0.2<=l_y&&l_y<=1.1){
     //斜め右前
     rfmotor.setSpeed(0);
     lfmotor.setSpeed(255);
-    rbmotor.setSpeed(255);
+    rbmotor.setSpeed(-255);
     lbmotor.setSpeed(0);
     rotate=false;
+    Serial.println("right front");
   }
-  else if(-1<=l_x&&l_x<=-0.2&&0.2<=l_y&&l_y<=1){
+  else if(-1.1<=l_x&&l_x<=-0.2&&0.2<=l_y&&l_y<=1.1){
     //斜め左前
-    rfmotor.setSpeed(255);
+    rfmotor.setSpeed(-255);
     lfmotor.setSpeed(0);
     rbmotor.setSpeed(0);
     lbmotor.setSpeed(255);
     rotate=false;
+    Serial.println("left front");
   }
-  else if(0.2<=l_x&&l_x<=1&&-1<=l_y&&l_y<=-0.2){
+  else if(0.2<=l_x&&l_x<=1.1&&-1.1<=l_y&&l_y<=-0.2){
     //斜め右後ろ
-    rfmotor.setSpeed(-255);
+    rfmotor.setSpeed(255);
     lfmotor.setSpeed(0);
     rbmotor.setSpeed(0);
     lbmotor.setSpeed(-255);
     rotate=false;
+    Serial.println("right back");
   }
-  else if(-1<=l_x&&l_x<=-0.2&&-1<=l_y&&l_y<=-0.2){
+  else if(-1.1<=l_x&&l_x<=-0.2&&-1.1<=l_y&&l_y<=-0.2){
     //斜め左後ろ
     rfmotor.setSpeed(0);
     lfmotor.setSpeed(-255);
-    rbmotor.setSpeed(-255);
+    rbmotor.setSpeed(255);
     lbmotor.setSpeed(0);
     rotate=false;
+    Serial.println("left back");
   }
   if(rotate){
-    if(0<=r_x&&r_x<=1){
+    if(0.2<=r_x&&r_x<=1.1){
       //右旋回
-      rfmotor.setSpeed(-255);
-      lfmotor.setSpeed(255);
-      rbmotor.setSpeed(-255);
-      lbmotor.setSpeed(255);
-    }
-    else if(-1<=r_x&&r_x<0){
-      //左旋回
       rfmotor.setSpeed(255);
-      lfmotor.setSpeed(-255);
+      lfmotor.setSpeed(255);
       rbmotor.setSpeed(255);
+      lbmotor.setSpeed(255);
+      Serial.println("right rotate");
+    }
+    else if(-1.1<=r_x&&r_x<-0.2){
+      //左旋回
+      rfmotor.setSpeed(-255);
+      lfmotor.setSpeed(-255);
+      rbmotor.setSpeed(-255);
       lbmotor.setSpeed(-255);
+      Serial.println("left rotate");
     }
   }
-  delay(10); // delayの秒数[ms]は適宜変更する. 10ms = 0.01s.
+  delay(100); // delayの秒数[ms]は適宜変更する. 10ms = 0.01s.
 }
 
 // PS4コントローラーの入力を受け取る
@@ -172,50 +201,6 @@ void ReceiveControllerInput() {
     l_y = PS4.LStickY() / 127.0; // -127 ~ 127 -> -1.0 ~ 1.0
     r_x = PS4.RStickX() / 127.0; // -127 ~ 127 -> -1.0 ~ 1.0
     r_y = PS4.RStickY() / 127.0; // -127 ~ 127 -> -1.0 ~ 1.0
-
-    //スティックの値がちょっとぶれたときの補正
-    if(l_x>=1.0){
-      l_x==1.0;
-    }
-    else if(l_x<=-1.0){
-      l_x==-1.0;
-    }
-    else{
-      l_x==l_x;
-    }
-
-    if(l_y>=1.0){
-      l_y==1.0;
-    }
-    else if(l_x<=-1.0){
-      l_y==-1.0;
-    }
-    else{
-      l_y==l_y;
-    }
-
-    if(r_x>=1.0){
-      r_x==1.0;
-    }
-    else if(r_x<=-1.0){
-      r_x==-1.0;
-    }
-    else{
-      r_x==r_x;
-    }
-
-    if(r_y>=1.0){
-      r_y==1.0;
-    }
-    else if(r_y<=-1.0){
-      r_y==-1.0;
-    }
-    else{
-      r_y==r_y;
-    }
-
-
-
 
     // ボタン押したときの挙動をifの中に書く
     if (PS4.Up() && !prev_bttn_state[0]) {
@@ -243,15 +228,31 @@ void ReceiveControllerInput() {
       Serial.println("> PS4: Square button pressed");
     }
     if (PS4.L1() && !prev_bttn_state[8]) {
+      rotate=false;
+      m1=false;
+      m2=true;
+      m3=false;
       Serial.println("> PS4: L1 button pressed");
     }
     if (PS4.R1() && !prev_bttn_state[9]) {
+      rotate=false;
+      m1=true;
+      m2=false;
+      m3=false;
       Serial.println("> PS4: R1 button pressed");
     }
     if (PS4.L2() && !prev_bttn_state[10]) {
+      rotate=false;
+      m1=false;
+      m2=false;
+      m3=true;
       Serial.println("> PS4: L2 button pressed");
     }
     if (PS4.R2() && !prev_bttn_state[11]) {
+      rotate=true;
+      m1=false;
+      m2=false;
+      m3=false;
       Serial.println("> PS4: R2 button pressed");
     }
     if (PS4.Share() && !prev_bttn_state[12]) {
