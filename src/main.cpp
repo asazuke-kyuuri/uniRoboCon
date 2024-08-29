@@ -105,7 +105,7 @@ void loop() {
     rotate=false;
     Serial.println("front");
   }
-  else if(0.2<=l_x&&l_x<=0.2&&-1.1<=l_y&&l_y<=-0.2){
+  else if(-0.2<=l_x&&l_x<=0.2&&-1.1<=l_y&&l_y<=-0.2){
     //後ろ
     rfmotor.setSpeed(255);
     lfmotor.setSpeed(-255);
