@@ -3,13 +3,14 @@
 #include <PS4Controller.h>
 #include "PS4Controller.h"
 #include "CytronMotorDriver.h"
+#include <IcsHardSerialClass.h>
 /* ここにサーボモータのライブラリをインクルードする */
 //
 //
 
 // PS4コントローラーのMACアドレス
 // 使いたいPS4コントローラのMACアドレスをあらかじめ調べておく
-#define PS4_ADDR "11:11:11:11:11:11" 
+#define PS4_ADDR "64:82:14:12:57:57" 
 //64:82:14:12:57:57
 
 void ReceiveControllerInput();
@@ -19,15 +20,10 @@ float l_y = 0.0; // 左スティックのY軸
 float r_x = 0.0; // 右スティックのX軸
 float r_y = 0.0; // 右スティックのY軸
 
-/*//モーターのピン番号
-#define rf 18 //right front
-#define lf 32 //left front
-#define rb 22 //right back
-#define lb 25 //left back*/
 
 // Configure the motor driver.
 //GPIO 0,1,3,14,15,34,35,36,39 は使用しない
-CytronMD rfmotor(PWM_DIR, 18, 19);  // PWM = Pin 3, DIR = Pin 4.
+CytronMD rfmotor(PWM_DIR, 18, 19);  // PWM = Pin 18, DIR = Pin 19.
 CytronMD lfmotor(PWM_DIR, 32, 33);
 CytronMD rbmotor(PWM_DIR, 16, 17);
 CytronMD lbmotor(PWM_DIR, 25, 26);
