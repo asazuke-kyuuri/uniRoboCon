@@ -4,13 +4,9 @@
 #include "PS4Controller.h"
 #include "CytronMotorDriver.h"
 #include <IcsHardSerialClass.h>
-/* ここにサーボモータのライブラリをインクルードする */
-//
-//
 
 // PS4コントローラーのMACアドレス
-// 使いたいPS4コントローラのMACアドレスをあらかじめ調べておく
-#define PS4_ADDR "64:82:14:12:57:57" 
+#define PS4_ADDR "08:D1:F9:37:09:A6" 
 //64:82:14:12:57:57
 
 void ReceiveControllerInput();
@@ -37,8 +33,13 @@ const int f=26;
 const int g=16;
 const int h=17;
 
+//近藤サーボ制御用変数
+int angle=0;
+int R_Y_in=0;
+int R_Y_use=0;
+
 //bool stopOrMove=false;//停止かそれ以外か false=stop,true=move
-  bool rotate=false;//その場で回転するか false=nomalMove,true=rotate
+  bool rotate=false;//
   bool m1=false;
   bool m2=false;
   bool m3=false;
@@ -74,10 +75,6 @@ void setup() {
   pinMode(f,OUTPUT);
   pinMode(g,OUTPUT);
   pinMode(h,OUTPUT);
-
-  /* ここにサーボモータの初期化コードを書く */
-  //
-  //
 }
 
 void loop() {
@@ -185,6 +182,26 @@ void loop() {
       lbmotor.setSpeed(-255);
       Serial.println("left rotate");
     }
+  }
+  else{
+    R_Y_in=PS4.RStickY();
+    R_Y_use=abs(R_Y_in);
+    if(R_Y_in>=25){
+      angle=map(R_Y_use,25,127.1,0,225);
+    }
+    else if(R_Y_in<-25){
+      angle=map(R_Y_use,-25,-127.1,-225,0);
+    }
+    Serial.println("angle");
+  }
+  if(m1){
+
+  }
+  if(m2){
+
+  }
+  if(m3){
+
   }
   delay(100); // delayの秒数[ms]は適宜変更する. 10ms = 0.01s.
 }
