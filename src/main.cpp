@@ -33,6 +33,12 @@ const int f=26;
 const int g=16;
 const int h=17;
 
+//近藤サーボ設定
+const byte EN_PIN=2;
+const long BAUDRATE=115200;
+const int TIMEOUT =1000;
+IcsHardSerialClass krs(&Serial,EN_PIN,BAUDRATE,TIMEOUT); //インスタンス＋ENピン(2番ピン)およびUARTの指定
+
 //近藤サーボ制御用変数
 int angle=0;
 int R_Y_in=0;
@@ -65,6 +71,8 @@ void setup() {
   delay(1000); // 1秒間待つ
   PS4.setRumble(0, 0);
   PS4.sendToController(); // PS4に送信(これで振動が止まる)
+
+  krs.begin();//サーボモータの通信初期設定
 
   //モーターピンの初期設定
   pinMode(a,OUTPUT);
@@ -187,21 +195,21 @@ void loop() {
     R_Y_in=PS4.RStickY();
     R_Y_use=abs(R_Y_in);
     if(R_Y_in>=25){
-      angle=map(R_Y_use,25,127.1,0,225);
+      angle=map(R_Y_use,25,127.1,100,225);
     }
     else if(R_Y_in<-25){
-      angle=map(R_Y_use,-25,-127.1,-225,0);
+      angle=map(R_Y_use,-127.1,-25,-225,-100);
     }
     Serial.println("angle");
   }
   if(m1){
-
+    krs.setPos(1,angle);
   }
   if(m2){
-
+    krs.setPos(2,angle);
   }
   if(m3){
-
+    krs.setPos(3,angle);
   }
   delay(100); // delayの秒数[ms]は適宜変更する. 10ms = 0.01s.
 }
