@@ -200,7 +200,7 @@ void loop() {
     else if(R_Y_in<-25){
       angle=map(R_Y_use,-127.1,-25,-225,-100);
     }
-    Serial.println("angle");
+    Serial.println("angle: %f");
   }
   if(m1){
     krs.setPos(1,angle);
