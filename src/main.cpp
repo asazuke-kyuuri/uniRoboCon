@@ -191,7 +191,18 @@ void loop() {
       Serial.println("left rotate");
     }
   }
-  else{
+  else if(m1){
+    R_Y_in=PS4.RStickY();
+    R_Y_use=abs(R_Y_in);
+    if(R_Y_in>=25){
+      angle=map(R_Y_use,25,127.1,10,125);
+    }
+    else if(R_Y_in<-25){
+      angle=map(R_Y_use,-127.1,-25,-10,-125);
+    }
+    krs.setPos(1,angle);
+  }
+  else if(m2||m3){
     R_Y_in=PS4.RStickY();
     R_Y_use=abs(R_Y_in);
     if(R_Y_in>=25){
@@ -200,16 +211,12 @@ void loop() {
     else if(R_Y_in<-25){
       angle=map(R_Y_use,-127.1,-25,-225,-100);
     }
-    Serial.println("angle: %f");
-  }
-  if(m1){
-    krs.setPos(1,angle);
-  }
-  if(m2){
-    krs.setPos(2,angle);
-  }
-  if(m3){
-    krs.setPos(3,angle);
+    if(m2){
+      krs.setPos(2,angle);
+    }
+    else if(m3){
+      krs.setPos(3,angle);
+    }
   }
   delay(100); // delayの秒数[ms]は適宜変更する. 10ms = 0.01s.
 }
