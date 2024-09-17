@@ -6,7 +6,7 @@
 #include <IcsHardSerialClass.h>
 
 // PS4コントローラーのMACアドレス
-#define PS4_ADDR "08:D1:F9:37:09:A6" 
+#define PS4_ADDR "08:d1:f9:37:22:50" 
 //64:82:14:12:57:57
 
 void ReceiveControllerInput();
@@ -30,13 +30,13 @@ const int c=32;
 const int d=33;
 const int e=25;
 const int f=26;
-const int g=16;
-const int h=17;
+const int g=22;
+const int h=23;
 
 //近藤サーボ設定
 const byte EN_PIN=2;
 const long BAUDRATE=115200;
-const int TIMEOUT =1000;
+const int TIMEOUT =10;
 IcsHardSerialClass krs(&Serial,EN_PIN,BAUDRATE,TIMEOUT); //インスタンス＋ENピン(2番ピン)およびUARTの指定
 
 //近藤サーボ制御用変数
@@ -192,33 +192,40 @@ void loop() {
     }
   }
   else if(m1){
-    R_Y_in=PS4.RStickY();
+    Serial.println("Happy");
+    if(0.2<=r_y&&r_y<=1){
+      krs.setPos(1,7700);
+    }
+    else if(-1.1<=r_y&&r_y<=-0.2){
+      krs.setPos(1,7350);
+    }
+    /*R_Y_in=PS4.RStickY();
     R_Y_use=abs(R_Y_in);
     if(R_Y_in>=25){
-      angle=map(R_Y_use,25,127.1,10,125);
+      angle=map(R_Y_use,25,127.1,7560,7700);
     }
     else if(R_Y_in<-25){
-      angle=map(R_Y_use,-127.1,-25,-10,-125);
+      angle=map(R_Y_use,-127.1,-25,7350,7440);
     }
-    krs.setPos(1,angle);
+    krs.setPos(1,angle);*/
   }
-  else if(m2||m3){
-    R_Y_in=PS4.RStickY();
-    R_Y_use=abs(R_Y_in);
-    if(R_Y_in>=25){
-      angle=map(R_Y_use,25,127.1,100,225);
+  else if(m2){
+    if(0.2<=r_y&&r_y<=1){
+      krs.setPos(2,7800);
     }
-    else if(R_Y_in<-25){
-      angle=map(R_Y_use,-127.1,-25,-225,-100);
-    }
-    if(m2){
-      krs.setPos(2,angle);
-    }
-    else if(m3){
-      krs.setPos(3,angle);
+    else if(-1.1<=r_y&&r_y<=-0.2){
+      krs.setPos(2,7250);
     }
   }
-  delay(100); // delayの秒数[ms]は適宜変更する. 10ms = 0.01s.
+  else if(m3){
+    if(0.2<=r_y&&r_y<=1){
+      krs.setPos(3,7800);
+    }
+    else if(-1.1<=r_y&&r_y<=-0.2){
+      krs.setPos(3,7250);
+    }
+  }
+  delay(1000); // delayの秒数[ms]は適宜変更する. 10ms = 0.01s.
 }
 
 // PS4コントローラーの入力を受け取る
