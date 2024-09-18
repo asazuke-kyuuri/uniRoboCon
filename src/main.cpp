@@ -21,7 +21,7 @@ float r_y = 0.0; // 右スティックのY軸
 //GPIO 0,1,3,14,15,34,35,36,39 は使用しない
 CytronMD rfmotor(PWM_DIR, 18, 19);  // PWM = Pin 18, DIR = Pin 19.
 CytronMD lfmotor(PWM_DIR, 32, 33);
-CytronMD rbmotor(PWM_DIR, 16, 17);
+CytronMD rbmotor(PWM_DIR, 22, 23);
 CytronMD lbmotor(PWM_DIR, 25, 26);
 
 const int a=18;
@@ -199,15 +199,6 @@ void loop() {
     else if(-1.1<=r_y&&r_y<=-0.2){
       krs.setPos(1,7350);
     }
-    /*R_Y_in=PS4.RStickY();
-    R_Y_use=abs(R_Y_in);
-    if(R_Y_in>=25){
-      angle=map(R_Y_use,25,127.1,7560,7700);
-    }
-    else if(R_Y_in<-25){
-      angle=map(R_Y_use,-127.1,-25,7350,7440);
-    }
-    krs.setPos(1,angle);*/
   }
   else if(m2){
     if(0.2<=r_y&&r_y<=1){
