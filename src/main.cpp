@@ -4,6 +4,7 @@
 #include "PS4Controller.h"
 #include "CytronMotorDriver.h"
 #include <IcsHardSerialClass.h>
+#include <IcsBaseClass.h>
 
 // PS4コントローラーのMACアドレス
 #define PS4_ADDR "08:d1:f9:37:22:50" 
