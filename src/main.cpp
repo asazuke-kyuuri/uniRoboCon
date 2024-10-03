@@ -192,7 +192,7 @@ void loop() {
       Serial.println("left rotate");
     }
   }
-  else if(m1){
+  if(m1){
     Serial.println("Happy");
     if(0.2<=r_y&&r_y<=1){
       krs.setPos(1,7700);
